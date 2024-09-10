@@ -43,14 +43,14 @@ const Stream: FC = () => {
 	const [currentStream] = useAppStore((store) => store.currentStream);
 	const [maximized] = useAppStore((store) => store.maximized);
 	const [sideBarOpen, setStreamStore] = useStreamStore((store) => store.sideBarOpen);
-	const {getStreamInfoRefetch, getStreamInfoLoading} = useGetStreamInfo(currentStream || '');
+	const { getStreamInfoRefetch, getStreamInfoLoading, getStreamInfoRefetching } = useGetStreamInfo(currentStream || '');
 
 	const {
 		refetch: refetchSchema,
 		isLoading: isSchemaLoading,
 		errorMessage: schemaFetchErrorMessage,
 		isError: isSchemaError,
-		isRefetching: isSchemaRefetching
+		isRefetching: isSchemaRefetching,
 	} = useGetStreamSchema({ streamName: currentStream || '' });
 
 	const fetchSchema = useCallback(() => {
@@ -72,9 +72,8 @@ const Stream: FC = () => {
 
 	if (!currentStream) return null;
 	if (!_.includes(STREAM_VIEWS, view)) return null;
-
 	const isSchemaFetching = isSchemaRefetching || isSchemaLoading;
-	const isInfoLoading = getStreamInfoLoading && view === 'explore'
+	const isInfoLoading = (getStreamInfoLoading || getStreamInfoRefetching) && view === 'explore';
 
 	return (
 		<Box

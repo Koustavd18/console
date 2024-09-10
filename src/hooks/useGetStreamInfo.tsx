@@ -13,6 +13,7 @@ export const useGetStreamInfo = (currentStream: string) => {
 		isError: getStreamInfoError,
 		isSuccess: getStreamInfoSuccess,
 		isLoading: getStreamInfoLoading,
+		isRefetching: getStreamInfoRefetching,
 		refetch: getStreamInfoRefetch,
 	} = useQuery(['stream-info', currentStream], () => getLogStreamInfo(currentStream), {
 		retry: false,
@@ -20,7 +21,7 @@ export const useGetStreamInfo = (currentStream: string) => {
 		refetchOnMount: true,
 		enabled: currentStream !== '',
 		onSuccess: (data) => {
-			setStreamStore((store) => setStreamInfo(store, data))
+			setStreamStore((store) => setStreamInfo(store, data));
 		},
 		onError: (data: AxiosError) => {
 			if (isAxiosError(data) && data.response) {
@@ -37,6 +38,7 @@ export const useGetStreamInfo = (currentStream: string) => {
 		getStreamInfoError,
 		getStreamInfoSuccess,
 		getStreamInfoLoading,
+		getStreamInfoRefetching,
 		getStreamInfoRefetch,
 	};
 };
